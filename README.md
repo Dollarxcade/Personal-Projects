@@ -11,4 +11,4 @@ This was a weather bot that I made for Discord because I couldn't find a bot tha
 
 So basically I have a Google Sheets file that is a simulation of a Valorant round-robin league with a large database and advanced simulation calculations and so to make the teams using the player's database I tried using a snake draft system and to do that an easy way was to code an app script using JavaScript using my JavaScript background. Still, it would prove to be tougher than I thought as sheets has a lot of quirks that I couldn't understand, so I successfully coded a draft but it would only simulate the first round and it would also create tens of thousands of rows by itself (I don't know how it did that) and so it doesn't work. It also breaks Google Sheets so I decided to do it the hard way and use functions within Google Sheets and so it's currently a work-in-progress as of the last update.
 
-*Updated 2024-11-28*
+*Last updated 2024-11-28*
