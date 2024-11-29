@@ -65,4 +65,4 @@ for (let i = 0; i < totalPicks && playerIndex < players.length; i++) {
   }
 }
 //THIS CODE IS BROKEN DO NOT USE I REPEAT DO NOT USE IT WILL BREAK GOOGLE SHEETS
-//Last Updated 2024-11-28
+//Last updated 2024-11-28
