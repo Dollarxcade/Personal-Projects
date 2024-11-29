@@ -21,3 +21,4 @@ client.on("message", message => {
 client.login(process.env.token)
 
 //Run this node.js
+//Last updated ∽2021
