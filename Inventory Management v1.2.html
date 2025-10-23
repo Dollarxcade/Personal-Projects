@@ -116,11 +116,14 @@ const App = () => {
         soldPrice: '',
     });
     
-    // NEW: State for Item Name/Description editing
+    // NEW: State for Item Name/Description and Price editing
     const [editItemModal, setEditItemModal] = useState({
         itemId: null,
         name: '',
         currentSku: '',
+        type: 'inventory', // Added to determine which price field to show
+        purchaseCost: '', // Added for editing
+        soldPrice: '',    // Added for editing
     });
 
     // 1. Firebase Initialization and Anonymous Authentication
@@ -153,6 +156,20 @@ const App = () => {
                     });
                 }
             });
+
+            // If an initial custom auth token is provided (by Canvas), use it.
+            if (typeof __initial_auth_token !== 'undefined') {
+                auth.signInWithCustomToken(__initial_auth_token).catch(e => {
+                    console.error("DEBUG ERROR: Custom token sign-in failed:", e);
+                    // Fallback to anonymous if custom token fails
+                    auth.signInAnonymously().catch(e => {
+                        console.error("DEBUG ERROR: Anonymous sign-in failed:", e);
+                        setError(`Authentication Failed: ${e.message}. Check your Firebase Authentication setup.`);
+                        setIsAuthReady(true); // Stop loading, show error
+                    });
+                });
+            }
+
 
             return () => unsubscribeAuth();
         } catch (e) {
@@ -296,8 +313,8 @@ const App = () => {
         }
     };
     
-    // NEW: Function to handle updating the item name/description
-    const handleUpdateName = async (e) => {
+    // NEW: Function to handle updating the item name/description AND the price fields
+    const handleUpdateDetails = async (e) => {
         e.preventDefault();
         
         const alertBox = (message) => {
@@ -307,20 +324,40 @@ const App = () => {
 
         if (!dbInstance || !editItemModal.itemId) return alertBox("System not fully connected or item ID missing.");
         if (!editItemModal.name.trim()) return alertBox("Please provide an Item Name/Description.");
+        
+        const updateData = {
+            name: editItemModal.name.trim(),
+        };
 
+        // Handle Purchase Cost update for Inventory items
+        if (editItemModal.type === 'inventory') {
+            const cost = parseFloat(editItemModal.purchaseCost);
+            if (isNaN(cost) || cost < 0) {
+                 alertBox("Please enter a valid Purchase Cost (cannot be negative).");
+                 return;
+            }
+            updateData.purchaseCost = cost;
+        }
+
+        // Handle Sold Price update (applies if item was sold)
+        const price = parseFloat(editItemModal.soldPrice);
+        // We only update soldPrice if it's explicitly set or cleared (i.e., not null/undefined from the DB)
+        // If the item is sold, we validate it's > 0. Otherwise, we allow it to be 0 or N/A.
+        if (price > 0 || (editItemModal.soldPrice !== null && editItemModal.soldPrice !== undefined && editItemModal.soldPrice !== '')) {
+            updateData.soldPrice = price || 0;
+        }
+        
         // Use v8 syntax: db.collection().doc(id)
         const itemRef = dbInstance.collection(COLLECTION_NAME).doc(editItemModal.itemId);
         
         try {
-            await itemRef.update({
-                name: editItemModal.name.trim(),
-            });
+            await itemRef.update(updateData);
             setActiveModal(null);
-            setEditItemModal({ itemId: null, name: '', currentSku: '' });
-            alertBox(`Successfully updated item name for SKU: ${editItemModal.currentSku}`);
+            setEditItemModal({ itemId: null, name: '', currentSku: '', type: 'inventory', purchaseCost: '', soldPrice: '' });
+            alertBox(`Successfully updated item details for SKU: ${editItemModal.currentSku}`);
         } catch (e) {
-            console.error("Error updating item name: ", e);
-            setError(`Failed to update item name: ${e.message}`);
+            console.error("Error updating item details: ", e);
+            setError(`Failed to update item details: ${e.message}`);
         }
     };
     
@@ -346,13 +383,16 @@ const App = () => {
         });
     };
     
-    // NEW: Handler to open the Edit Details modal
+    // NEW: Handler to open the Edit Details modal, now populating price fields too
     const handleOpenEditModal = (item) => {
         setActiveModal('edit-details'); // Use a special identifier for this new modal type
         setEditItemModal({
             itemId: item.id,
             name: item.name,
             currentSku: item.sku,
+            type: item.type,
+            purchaseCost: item.purchaseCost !== undefined ? String(item.purchaseCost) : '',
+            soldPrice: item.soldPrice !== undefined ? String(item.soldPrice) : '',
         });
         setError(''); // Clear previous error
     };
@@ -479,7 +519,7 @@ const App = () => {
                                         {item.status === 'Sold' ? formatCurrency(item.soldPrice) : '—'}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex justify-end space-x-2">
-                                        {/* NEW: Button to open Edit Details Modal */}
+                                        {/* Button to open Edit Details Modal */}
                                         <button
                                             onClick={() => handleOpenEditModal(item)}
                                             className="text-gray-600 hover:text-gray-900 transition duration-150 px-3 py-1.5 rounded-md hover:bg-gray-100 border border-gray-300 text-xs font-normal"
@@ -632,12 +672,12 @@ const App = () => {
                 </div>
             )}
             
-            {/* NEW MODAL: EDIT ITEM DETAILS MODAL */}
+            {/* MODAL: EDIT ITEM DETAILS (Name and Price) */}
             {activeModal === 'edit-details' && (
                 <div className="modal-overlay">
                     <div className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-lg m-4">
                         <h2 className="text-2xl font-bold mb-2 text-gray-800">Edit Item Details</h2>
-                        <p className="text-lg mb-4 text-indigo-600 font-semibold">SKU: {editItemModal.currentSku}</p>
+                        <p className="text-lg mb-4 text-indigo-600 font-semibold">SKU: {editItemModal.currentSku} ({editItemModal.type.charAt(0).toUpperCase() + editItemModal.type.slice(1)})</p>
                         
                         {isModalError && (
                             <div className="p-3 mb-4 text-sm font-medium text-red-800 bg-red-100 border border-red-300 rounded-lg transition duration-300">
@@ -645,8 +685,9 @@ const App = () => {
                             </div>
                         )}
 
-                        <form onSubmit={handleUpdateName}>
+                        <form onSubmit={handleUpdateDetails}>
                             <div className="space-y-4">
+                                {/* Item Name/Description */}
                                 <div>
                                     <label htmlFor="edit-name" className="block text-sm font-medium text-gray-700">Item Name / Description</label>
                                     <textarea
@@ -658,12 +699,45 @@ const App = () => {
                                         required
                                     />
                                 </div>
+
+                                {/* Purchase Cost (Only for Inventory items) */}
+                                {editItemModal.type === 'inventory' && (
+                                    <div>
+                                        <label htmlFor="edit-purchaseCost" className="block text-sm font-medium text-gray-700">Purchase Cost ($)</label>
+                                        <input
+                                            type="number"
+                                            id="edit-purchaseCost"
+                                            step="0.01"
+                                            min="0"
+                                            value={editItemModal.purchaseCost}
+                                            onChange={(e) => setEditItemModal(prev => ({ ...prev, purchaseCost: e.target.value }))}
+                                            className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 focus:ring-indigo-500 focus:border-indigo-500"
+                                        />
+                                    </div>
+                                )}
+
+                                {/* Sold Price (Applicable to both types, especially if status is 'Sold') */}
+                                <div>
+                                    <label htmlFor="edit-soldPrice" className="block text-sm font-medium text-gray-700">Final Sold Price ($)</label>
+                                    <input
+                                        type="number"
+                                        id="edit-soldPrice"
+                                        step="0.01"
+                                        min="0"
+                                        value={editItemModal.soldPrice}
+                                        onChange={(e) => setEditItemModal(prev => ({ ...prev, soldPrice: e.target.value }))}
+                                        placeholder="0.00"
+                                        className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-2.5 focus:ring-indigo-500 focus:border-indigo-500"
+                                    />
+                                    <p className="mt-1 text-xs text-gray-500">Update this field if the item was sold and the price was initially incorrect.</p>
+                                </div>
+                                
                             </div>
 
                             <div className="mt-6 flex justify-end space-x-3">
                                 <button
                                     type="button"
-                                    onClick={() => { setActiveModal(null); setEditItemModal({ itemId: null, name: '', currentSku: '' }); setError(''); }}
+                                    onClick={() => { setActiveModal(null); setEditItemModal({ itemId: null, name: '', currentSku: '', type: 'inventory', purchaseCost: '', soldPrice: '' }); setError(''); }}
                                     className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
                                 >
                                     Cancel
