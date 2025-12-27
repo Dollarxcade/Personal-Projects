@@ -1,5 +1,5 @@
 # Personal-Projects
-Some of my side projects
+Some of my side projects that I do on my free time. 
 ## Weather Bot
 > [!NOTE]
 > This project is incomplete.
