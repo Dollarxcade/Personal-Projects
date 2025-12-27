@@ -40,7 +40,7 @@ def resolve_ties(teams_to_fix, all_matches, standings):
     # Calculate Tiebreaker Metrics
     metrics = []
     for team in teams_to_fix:
-        # 16.1.1.1 & 16.1.2.1: H2H Record
+        # H2H Record
         h2h_wins = 0
         h2h_rd = 0
         for _, m in h2h_matches.iterrows():
@@ -51,12 +51,12 @@ def resolve_ties(teams_to_fix, all_matches, standings):
                 if m['ScoreB'] > m['ScoreA']: h2h_wins += 1
                 h2h_rd += (m['ScoreB'] - m['ScoreA'])
         
-        # 16.1.1.5: Overall Round Win %
+        # Overall Round Win %
         total_r_won = standings[team]['rd_plus']
         total_r_played = standings[team]['rd_plus'] + standings[team]['rd_minus']
         win_pct = total_r_won / total_r_played if total_r_played > 0 else 0
         
-        # 16.1.1.6: Strength of Schedule
+        # Strength of Schedule
         sos = get_sos(team, all_matches, standings)
         
         metrics.append({
@@ -65,13 +65,13 @@ def resolve_ties(teams_to_fix, all_matches, standings):
             'h2h_rd': h2h_rd,
             'win_pct': win_pct,
             'sos': sos,
-            'random': np.random.random() # 16.1.1.9: Coin Flip
+            'random': np.random.random() # Coin Flip
         })
 
     # Sort by the priority list
     metrics.sort(key=lambda x: (x['h2h_w'], x['h2h_rd'], x['win_pct'], x['sos'], x['random']), reverse=True)
     
-    # Check for sub-ties to handle Rule 16.1.2 (separating into new tiebreakers)
+    # Check for sub-ties (separating into new tiebreakers)
     final_ordered = []
     i = 0
     while i < len(metrics):
@@ -148,4 +148,7 @@ def run_sim(iterations=10000):
     pivot.to_csv('detailed_sim_results.csv')
 
 if __name__ == "__main__":
+
     run_sim()
+
+# Last updated 2025-12-20
