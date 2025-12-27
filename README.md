@@ -36,11 +36,11 @@ The application was built to work specifically with Firebase as its backend for 
 > [!NOTE]
 > This was made for a specific Valorant league that I participated in. Although the code is fairly simple and the tiebreaker logic is very similar to other Valorant leagues and VCT so if you have coding knowledge it's fairly simple to fix.
 
-The **VDC Simulation Script** is a Python-based league simulator created specifically for a Valorant league called **VDC**. It simulates the outcome of an entire season by combining **real past match results** with **simulated future matches**.
+The **VDC Simulation Script** is a Python-based league simulator created specifically for a Valorant league called **VDC**. It simulates the outcome of an entire season by combining real past match results with simulated future matches.
 
-The league uses a **round-robin Best-of-2** format, meaning matches can end in ties on each matchday. For unplayed matches, the script applies a **50/50 match outcome logic** to simulate future results based on existing match structure rather than team strength modeling.
+The league uses a round-robin Best-of-2 format, meaning matches can end in ties on each matchday. For unplayed matches, the script applies a 50/50 match outcome logic to simulate future results based on existing match structure rather than team strength modeling.
 
-Comments are included throughout the code to show where values can be edited to support **Best-of-3** formats. While the script was designed for a specific league, its overall structure is similar to many other Valorant leagues and can be adapted by adjusting the relevant values and inputs.
+Comments are included throughout the code to show where values can be edited to support Best-of-3 formats. While the script was designed for a specific league, its overall structure is similar to many other Valorant leagues and can be adapted by adjusting the relevant values and inputs.
 
 ### Limitations
 - Designed **only for Valorant**
