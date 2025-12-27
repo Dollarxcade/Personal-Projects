@@ -69,8 +69,10 @@ Create a spreadsheet with the following columns:
 4. Away Team Total Rounds Won  
 
 - Leave both “Rounds Won” columns empty for **unplayed future matches**
+
 Example format:  
-  ![Spreadsheet Example](https://i.imgur.com/hxjtEDJ.png)
+
+![Spreadsheet Example](https://i.imgur.com/hxjtEDJ.png)
 
 Export the spreadsheet as a **CSV file**.
 
