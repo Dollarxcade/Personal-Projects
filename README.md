@@ -70,7 +70,7 @@ Create a spreadsheet with the following columns:
 
 - Leave both “Rounds Won” columns empty for **unplayed future matches**
 - Example format:  
-  ![Spreadsheet Example](https://imgur.com/a/o6dxJ6Z)
+  ![Spreadsheet Example](https://i.imgur.com/hxjtEDJ.png)
 
 Export the spreadsheet as a **CSV file**.
 
