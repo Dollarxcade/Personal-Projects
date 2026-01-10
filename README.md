@@ -57,6 +57,8 @@ Comments are included throughout the code to show where values can be edited to 
   [VS Code Download](https://code.visualstudio.com/download)
 - Install the **Python extension for VS Code**:  
   [Python Extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
+- Install required Python libraries by running the following in a terminal:
+  `pip install pandas numpy`
 
 ---
 
