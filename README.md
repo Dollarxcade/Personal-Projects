@@ -94,4 +94,39 @@ Export the spreadsheet as a **CSV file**.
 - Simulation results will appear in the **VS Code console**
 - A new **CSV file** containing the simulated standings/results will be created in the same folder as the script
 
-*Last updated 2025-12-26*
+## VDC MMR Scraper
+> [!WARNING]
+> This was made to only work for the VDC website as of **2026-01-10**
+
+The primary goal of this tool is to allow users to **extract MMR values, Tiers, and Usernames** of players independently. It provides a way to gather league data without needing to be on the staff team or gaining access to sensitive administrative data. This tool bridges the gap created by current technical limitations in providing direct data exports.
+
+### How It Works
+The script uses **Playwright**, a professional-grade browser automation library, to interact with the website just like a human would.
+
+* **Bypasses Security:** It launches a real instance of the Chromium browser, allowing you to manually complete Cloudflare "Verify you are human" checks.
+* **Automated Loading:** Once you are past the security gate, the script handles the "Load More" logic, clicking the button automatically until the entire roster is rendered.
+* **Targeted Extraction:** It scans the page specifically for Usernames, Tiers, and MMR values.
+* **Data Cleaning:** It filters out banned or retired players who lack active stats and saves the final result to a `league_roster.csv` file.
+
+### Installation & Setup
+
+To keep things simple, we recommend using **Visual Studio Code (VS Code)**.
+
+- 1. Install VS Code
+  Download and install the code editor from the official site:
+  **Download Link:** [VS Code Download](https://code.visualstudio.com/download)
+- 2. Install the Python Extension
+Open VS Code, click on the **Extensions** icon on the left sidebar (looks like four squares), and install:
+  **Extension Link:** [Python for VS Code](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
+- 3. Install Required Libraries
+  Open your terminal inside VS Code (**Terminal > New Terminal**) and run these commands:
+
+```bash
+# Install the automation library
+pip install playwright
+
+# Install the browser engine required for the script
+python -m playwright install chromium
+```
+
+*Last updated 2026-01-10*
