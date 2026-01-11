@@ -136,9 +136,9 @@ python -m playwright install chromium
 3. Run the Script: Click the "Run" triangle button in the top right corner of VS Code.
 4. Human Verification: A browser window will open. Complete the Cloudflare prompt manually.
 5. Optimize the List: To make the script go faster and avoid unnecessary data:
-- Go to the "League Status" dropdown on the webpage.
-- Select filters for GM/AGM, FA, RFA, and Signed.
-- This limits the list to active players only.
+  - Go to the "League Status" dropdown on the webpage.
+  - Select filters for GM/AGM, FA, RFA, and Signed.
+  - This limits the list to active players only.
 6. Trigger the Scrape: Once the filtered player list is visible, go back to the VS Code terminal at the bottom and press the Enter key.
 7. Wait for Completion: The script will automatically click "Load more" until the end of the list is reached.
 8. Find your Data: Once finished, a file named league_roster.csv will be created in the same folder as your script.
