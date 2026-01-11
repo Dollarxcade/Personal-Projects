@@ -132,7 +132,7 @@ python -m playwright install chromium
 
 ### How To Use
 
-1. Prepare the File: Create a new folder, download VDC MMR.py and put it into that new folder.
+1. Prepare the File: Create a new folder, download `VDC MMR.py` and put it into that new folder.
 2. Prepare the Script: Right click on the file in file explorer and select **Open in Visual Studio Code**.
 3. Run the Script: Click the "Run" triangle button in the top right corner of VS Code.
 4. Human Verification: A browser window will open. Complete the Cloudflare prompt manually.
@@ -142,6 +142,6 @@ python -m playwright install chromium
   - This limits the list to active players only.
 6. Trigger the Scrape: Once the filtered player list is visible, go back to the VS Code terminal at the bottom and press the Enter key.
 7. Wait for Completion: The script will automatically click "Load more" until the end of the list is reached.
-8. Find your Data: Once finished, a file named league_roster.csv will be created in the same folder as your script.
+8. Find your Data: Once finished, a file named `league_roster.csv` will be created in the same folder as your script.
 
 *Last updated 2026-01-10*
