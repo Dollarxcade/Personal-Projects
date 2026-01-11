@@ -112,13 +112,13 @@ The script uses **Playwright**, a professional-grade browser automation library,
 
 To keep things simple, we recommend using **Visual Studio Code (VS Code)**.
 
-- 1. Install VS Code
+1. Install VS Code
   Download and install the code editor from the official site:
   **Download Link:** [VS Code Download](https://code.visualstudio.com/download)
-- 2. Install the Python Extension
+2. Install the Python Extension
 Open VS Code, click on the **Extensions** icon on the left sidebar (looks like four squares), and install:
   **Extension Link:** [Python for VS Code](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
-- 3. Install Required Libraries
+3. Install Required Libraries
   Open your terminal inside VS Code (**Terminal > New Terminal**) and run these commands:
 
 ```bash
