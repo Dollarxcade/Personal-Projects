@@ -1,5 +1,6 @@
 # Personal-Projects
-Some of my side projects that I do on my free time. 
+Some of my side projects that I do on my free time. Only 1 file ones, any projects with more have their seperate repo.
+
 ## Weather Bot
 > [!NOTE]
 > This project is incomplete.
